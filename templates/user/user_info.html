@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}个人资料{% endblock %}
+{% block nav_home_active %}active{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-2">
+                {% if user.is_authenticated %}
+                    <table class="table table-bordered">
+                        <th>个人资料</th>
+
+                        <tr>
+                            <td>个人账号:{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <td>昵称: &nbsp;&nbsp;{{ user.get_nickname }}&nbsp;&nbsp;<a href="{% url 'user:change_nickname' %}?from={{ request.get_full_path }}">修改昵称</a></td>
+                        </tr>
+                        <tr>
+                            <td>邮箱: {% if user.email %}{{ user.email }}{% else %}未绑定&nbsp;&nbsp;<a
+                                    href="{% url 'user:bind_email' %}?from={{ request.get_full_path }}">绑定邮箱</a>{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>上一次登陆时间: {{ user.last_login|date:'Y-m-d H:i:s' }}</td>
+                        </tr>
+                        <tr>
+                            <td>其他操作:&nbsp;&nbsp;<a href="{% url 'user:change_password' %}">修改密码</a></td>
+                        </tr>
+                    </table>
+
+                {% else %}
+                    <span>未登录， 跳转到首页...</span>
+                    <script type="text/javascript">
+                        window.location.href = '/';
+                    </script>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+

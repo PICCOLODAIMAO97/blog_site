@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Piccolo的个人博客|我的消息
+{% endblock %}
+{% block nav_home_active %}
+    active
+{% endblock %}
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'css/my_notifications.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <h3>消息中心</h3>
+                <br>
+                <ul class="notifications">
+                    {% for notification in request.user.notifications.all %}
+                        <li class="{% if not notification.unread %}read{% endif %}">[{{ notification.timesince }}之前],<a
+                                href="{% url 'my_notifications:my_notification' notification.pk %}">{{ notification.verb }}</a></li>
+                    {% empty %}
+                        <li>暂时没有消息哦！</li>
+                    {% endfor %}
+                </ul>
+                <hr>
+                <a class="btn btn-primary"
+                   href="{% url 'notifications:mark_all_as_read' %}?next={% url 'my_notifications:my_notifications' %}">全部标记成已读</a>
+                <a class="btn btn-danger" href="{% url 'my_notifications:delete_my_read_notifications' %}">删除已读消息</a>
+                <hr>
+            </div>
+        </div>
+    </div>
+{% endblock %}
